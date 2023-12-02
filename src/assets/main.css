@@ -1,0 +1,19 @@
+@import './base.css';
+@import './style.css';
+
+#app {
+  max-width: 1580px;
+  margin: 0 auto;
+  padding: 0rem;
+  font-weight: normal;
+}
+
+
+
+  #app {
+    display: grid;
+    padding: 0 0rem;
+  }
+
+
+ 
