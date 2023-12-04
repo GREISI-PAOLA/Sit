@@ -11,7 +11,7 @@ import Api from './components/Api.vue'
 
     <header>
       <div class="logo">
-    <img src="C:/Users/greis/Documents/7mo/Programacion web/vue/Sit/src/assets/logo2.png" alt="Logo" />
+    <img src="./assets/logo2.png" alt="Logo" />
 </div>
 
         <div class=" centrar">  
