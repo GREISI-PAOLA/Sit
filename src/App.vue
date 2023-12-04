@@ -1,5 +1,6 @@
 <script setup>
 import Api from './components/Api.vue'
+
 </script>
 
 <template>
@@ -9,9 +10,10 @@ import Api from './components/Api.vue'
     </head>
 
     <header>
-        <div class="logo">
-            <img src="C:\Users\greis\Documents\7mo\Programacion web\vue\Sit\src\assets\logo2.png" alt="Logo" />
-        </div>
+      <div class="logo">
+    <img src="C:/Users/greis/Documents/7mo/Programacion web/vue/Sit/src/assets/logo2.png" alt="Logo" />
+</div>
+
         <div class=" centrar">  
           <H1>SITMOTUL</H1>
             <H2>Estado de la evaluación tutor del periodo 2023b al 5 de diciembre de 2023</H2>
@@ -19,6 +21,7 @@ import Api from './components/Api.vue'
     </header>
   
   <Api></Api>
+ 
   <div>
 
 

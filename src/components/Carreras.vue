@@ -1,68 +1,116 @@
+
+<template>
+ <div id="app">
+    <div class="container">
+      <div v-for="(data, index) in infoPersonal" :key="index" class="item" @mouseover="hoverItem" @mouseout="unhoverItem">
+        <div v-if="data.IEM">
+          <p>Ingenieria en Electromécanica</p>
+          <p>Listas: {{ data.IEM.listas }}</p>
+          <p>Faltantes: {{ data.IEM.faltantes }}</p>
+        </div>
+      </div>
+
+      <div v-for="(data, index) in infoPersonal" :key="index" class="item" @mouseover="hoverItem" @mouseout="unhoverItem">
+        <div v-if="data.IER">
+          <p>Ingenieria en Energías Renobables</p>
+            <p>Listas: {{ data.IER.listas }}</p> 
+          <p> Faltantes: {{ data.IER.faltantes }}</p>
+        </div>
+      </div>
+
+      <div v-for="(data, index) in infoPersonal" :key="index" class="item" @mouseover="hoverItem" @mouseout="unhoverItem">
+        <div v-if="data.II">
+          <p>Ingeniria Industrial</p>
+          <p>Listas: {{ data.II.listas }}</p>
+          <p>Faltantes: {{ data.II.faltantes }}</p>
+        </div>
+      </div>
+
+      <div v-for="(data, index) in infoPersonal" :key="index" class="item" @mouseover="hoverItem" @mouseout="unhoverItem">
+        <div v-if="data.ISC">
+          <p>Ingenieria en Sistemas Computacionales </p>
+          <p> Listas: {{ data.ISC.listas }}</p>
+          <p> Faltantes: {{ data.ISC.faltantes }}</p>
+        </div>
+      </div>
+
+      <div v-for="(data, index) in infoPersonal" :key="index" class="item" @mouseover="hoverItem" @mouseout="unhoverItem">
+        <div v-if="data.IE">
+          <p>Ingenieria en Electrónica</p>
+          <p >Listas: {{ data.ISC.listas }}</p>
+            <p> Faltantes: {{ data.IE.faltantes }}</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</template>
+
 <script setup>
+import { onMounted } from 'vue'
+import { ref } from 'vue'
 
-import { onMounted } from 'vue';
-import { ref } from 'vue';
+// Definir variables reactivas
+const infoGeneral = ref([]) // Almacena datos de Información General
+const infoPersonal = ref([]) // Almacena datos de Información Personal
 
-const infoi = ref('');
-var IEML = "";
-var IEMF = "";
-var IIL = "";
-var IIF = "";
-var ISCL = "";
-var ISCF = "";
-var IEL = "";
-var IEF = "";
-var IERL = "";
-var IERF= "";
+// Variables para mostrar en la plantilla
+const totalEvaluados = ref(0)
+const totalAlumnos = ref(0)
+const periodo = ref('')
 
-async function fetchData() {
-  try {
-    const response = await fetch('https://sitmotul.com.mx/api/statusEvalIng')
-    const data = await response.json();
-    infoi.value = data
-    // isLoading.value = false
+// Función para obtener datos de la API
+async function fetchData(apiUrl, infoArray) {
+	try {
+		const response = await fetch(apiUrl)
+		const data = await response.json()
+		infoArray.value.push(data) // Almacenar datos en el array correspondiente
 
-    // IEM
-    IEML = infoi.value['IEM'] ['listas'];
-    IEMF = infoi.value['IEM'] ['faltantes'];
-    document.getElementById('IEML').textContent = "Al día de hoy se han realizado " + IEML + " evaluaciones";
-    document.getElementById('IEMF').textContent = "Faltan por realizarse " + IEMF + " evaluaciones";
+		// Actualizar variables para mostrar en la plantilla
+		totalEvaluados.value += data.alEvaluados || 0
+		totalAlumnos.value += data.alTotal || 0
+		if (!periodo.value) {
+			periodo.value = data.periodo || ''
+		}
 
-    //II
-    IIL = infoi.value['II'] ['listas'];
-    IIF = infoi.value['II'] ['faltantes'];
-    document.getElementById('IIL').textContent = "Al día de hoy se han realizado " + IIL + " evaluaciones";
-    document.getElementById('IIF').textContent = "Faltan por realizarse " + IIF + " evaluaciones";
-
-    //ISC
-    ISCL = infoi.value['ISC'] ['listas'];
-    ISCF = infoi.value['ISC'] ['faltantes'];
-    document.getElementById('ISCL').textContent = "Al día de hoy se han realizado " + ISCL + " evaluaciones";
-    document.getElementById('ISCF').textContent = "Faltan por realizarse " + ISCF + " evaluaciones";
-
-    //IER
-    IERL = infoi.value['IER'] ['listas'];
-    IERF = infoi.value['IER'] ['faltantes'];
-    document.getElementById('IERL').textContent = "Al día de hoy se han realizado " + IERL + " evaluaciones";
-    document.getElementById('IERF').textContent = "Faltan por realizarse " + IERF + " evaluaciones";
-
-   //IE
-    IEL = infoi.value['IE'] ['listas'];
-    IEF = infoi.value['IE'] ['faltantes'];
-    document.getElementById('IEL').textContent = "Al día de hoy se han realizado " + IEL + " evaluaciones";
-    document.getElementById('IEF').textContent = "Faltan por realizarse " + IEF + " evaluaciones";
-
-    console.log(IEML);
-  } catch (error) {
-    console.error('Error al obtener datos:', error);
-  }
+		console.log('Datos recibidos:', data)
+		// Imprimir datos adicionales en la consola
+		if (data.ObjectIE) {
+			console.log('ObjectIE:', data.ObjectIE)
+		}
+		if (data.IEM) {
+			console.log('IEM:', data.IEM)
+		}
+		if (data.IER) {
+			console.log('IER:', data.IER)
+		}
+		if (data.II) {
+			console.log('II:', data.II)
+		}
+		if (data.ISC) {
+			console.log('ISC:', data.ISC)
+		}
+	} catch (error) {
+		console.error('Error al obtener datos:', error)
+	}
 }
 
-onMounted(() => {
-  fetchData();
+// Función que se ejecuta al montar el componente
+onMounted(async () => {
+	// Obtener datos de la primera API
+	await fetchData('https://sitmotul.com.mx/api/statusEval', infoGeneral)
+
+	// Obtener datos de la segunda API (puedes cambiar la URL según sea necesario)
+	await fetchData('https://sitmotul.com.mx/api/statusEvalIng', infoPersonal)
 })
 
-</script>
-<template>
+const hoverItem = (event) => {
+  event.target.style.backgroundColor = '#84da33';
+};
 
-</template>
+const unhoverItem = (event) => {
+  event.target.style.backgroundColor = 'transparent';
+};
+
+
+
+</script>
